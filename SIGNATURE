@@ -1,0 +1,36 @@
+This file contains message digests of all files listed in MANIFEST,
+signed via the Module::Signature module, version 0.55.
+
+To verify the content in this distribution, first make sure you have
+Module::Signature installed, then type:
+
+    % cpansign -v
+
+It will check each file's integrity, as well as the signature's
+validity.  If "==> Signature verified OK! <==" is not displayed,
+the distribution may already have been compromised, and you should
+not run its Makefile.PL or Build.PL.
+
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+SHA1 9275621298d062e28654d9752fb41e02c3a004e1 Build.PL
+SHA1 b6ad55abc7f39f05251cbeaf06e76c776b2cede3 Changes
+SHA1 7d480759207ed867f91b575bbe54b74beb35fec2 MANIFEST
+SHA1 ad46b1f9d77d1248f6950ffad79921fc4fc984e6 META.yml
+SHA1 cd14ada78fb37a0d926edd86eddcdf7f939de582 Makefile.PL
+SHA1 08096246f961d0c210d7867b97bb6d470c8db900 README
+SHA1 bc4351115ed30b07e1da56d91434d57f27ef130a lib/Fey/DBIManager.pm
+SHA1 8b311fa271c02486e74fd55e927f62890944fb28 lib/Fey/DBIManager/Source.pm
+SHA1 1ba515c5335ebed9b8c3cb07db0d185ff95e7cc3 t/DBIManager.t
+SHA1 a810481d7c73b1d9d1a4e3dbbf2017a52bfe0288 t/Source.t
+SHA1 9ade2293d6e5ea77d94532132c89cd205ea85ed7 t/kwalitee.t
+SHA1 9c41912bea6665a839f7c53b63aebbba5aa47899 t/pod-coverage.t
+SHA1 fa09e1f76e152d19f3f46fd2b13b8b6810a04666 t/pod.t
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.6 (GNU/Linux)
+
+iD8DBQFHqJ8d3Or3ZzQuifMRAmTJAKDxbicG0JO+dkuZLn/B91RLT/82dQCePNxU
+yoCZCFbRl7jno7Ox3JKnhkk=
+=QBtX
+-----END PGP SIGNATURE-----

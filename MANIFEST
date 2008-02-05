@@ -1,0 +1,14 @@
+Build.PL
+Changes
+lib/Fey/DBIManager.pm
+lib/Fey/DBIManager/Source.pm
+MANIFEST			This list of files
+README
+t/DBIManager.t
+t/kwalitee.t
+t/pod-coverage.t
+t/pod.t
+t/Source.t
+Makefile.PL
+META.yml
+SIGNATURE    Added here by Module::Build
