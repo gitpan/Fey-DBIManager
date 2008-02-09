@@ -1,6 +1,6 @@
 ---
 name: Fey-DBIManager
-version: 0.02
+version: 0.03
 author:
   - 'Dave Rolsky, <autarch@urth.org>'
 abstract: Manage a set of DBI handles
@@ -9,6 +9,7 @@ resources:
   license: http://dev.perl.org/licenses/
 requires:
   Fey: 0
+  MooseX::AttributeHelpers: 0
   MooseX::Policy::SemiAffordanceAccessor: 0
   MooseX::StrictConstructor: 0
 build_requires:
@@ -17,7 +18,7 @@ build_requires:
 provides:
   Fey::DBIManager:
     file: lib/Fey/DBIManager.pm
-    version: 0.02
+    version: 0.03
   Fey::DBIManager::Source:
     file: lib/Fey/DBIManager/Source.pm
 generated_by: Module::Build version 0.2808
