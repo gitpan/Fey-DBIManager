@@ -1,5 +1,5 @@
 NAME
-    Fey::DBIManager - Manage a set of data sources
+    Fey::DBIManager - Manage a set of DBI handles
 
 SYNOPSIS
       my $manager = Fey::DBIManager->new();
