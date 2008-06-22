@@ -15,13 +15,13 @@ not run its Makefile.PL or Build.PL.
 Hash: SHA1
 
 SHA1 d8d8963badebc3420f717bddbc385d84abcba275 Build.PL
-SHA1 fddd500f1e7fd2bae75fa391aa320f92dff57059 Changes
+SHA1 13485731177507c16bc85e45b66c51e6ae0badc5 Changes
 SHA1 3da711d5e300caebfe4a64ff52330db3f3d29522 MANIFEST
-SHA1 d5e5e452eff22a2f7aad9d614bbf01f1aa7b3ab3 META.yml
+SHA1 55f433351f61378ac79960a7e8dd2de390349600 META.yml
 SHA1 cd14ada78fb37a0d926edd86eddcdf7f939de582 Makefile.PL
 SHA1 608c2f455facf21902bdea30be4950960ea8bd68 README
-SHA1 6bd157c4868f7160cda2efd2c88c1ec40e248c32 lib/Fey/DBIManager.pm
-SHA1 8e15be73483b3811ada5a84ff2595efe38ce2691 lib/Fey/DBIManager/Source.pm
+SHA1 a5dccc830a2b62854dc720a1ac5ddfbe3eaaef7d lib/Fey/DBIManager.pm
+SHA1 47190a692fa40900440b0c32ec8d9f319af7687b lib/Fey/DBIManager/Source.pm
 SHA1 1ba515c5335ebed9b8c3cb07db0d185ff95e7cc3 t/DBIManager.t
 SHA1 c1c91ffb3b6a2d4f88ce5828640c2e20fb08c28e t/Source-SQLite.t
 SHA1 dfaa51bd299564d4c867ceb1c16ee5c0ba773a23 t/Source.t
@@ -31,7 +31,7 @@ SHA1 fa09e1f76e152d19f3f46fd2b13b8b6810a04666 t/pod.t
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.4.6 (GNU/Linux)
 
-iD8DBQFIOWXE3Or3ZzQuifMRAhQvAKDj1oKYo6bKnNXvCEHNrEmArjJHtACcDJvp
-JULowpnK4km6Ddz23As9SIY=
-=uIOI
+iD8DBQFIXkmI3Or3ZzQuifMRAr3WAKDA1s6/V5Vf+7Ud3Y8IEsrzkJLUvACeMSKZ
+S0ZVlp0e93sAtlklDOYE7Ew=
+=/fh3
 -----END PGP SIGNATURE-----

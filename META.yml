@@ -1,6 +1,6 @@
 ---
 name: Fey-DBIManager
-version: 0.05
+version: 0.06
 author:
   - 'Dave Rolsky, <autarch@urth.org>'
 abstract: Manage a set of DBI handles
@@ -20,7 +20,7 @@ build_requires:
 provides:
   Fey::DBIManager:
     file: lib/Fey/DBIManager.pm
-    version: 0.05
+    version: 0.06
   Fey::DBIManager::Source:
     file: lib/Fey/DBIManager/Source.pm
 generated_by: Module::Build version 0.2808
