@@ -3,7 +3,7 @@ package Fey::DBIManager;
 use strict;
 use warnings;
 
-our $VERSION = '0.07';
+our $VERSION = '0.08';
 
 use Fey::Exceptions qw( object_state_error param_error );
 use Scalar::Util qw( blessed );
@@ -108,7 +108,7 @@ Fey::DBIManager - Manage a set of DBI handles
 
   my $manager = Fey::DBIManager->new();
 
-  $manager->add_source( dbh => $dbh );
+  $manager->add_source( dsn => 'dbi:Pg:dbname=MyDB' );
 
   my $source = $manager->default_source();
 

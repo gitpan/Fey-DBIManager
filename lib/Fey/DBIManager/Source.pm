@@ -164,10 +164,15 @@ sub _build_allows_nested_transactions
         {
             # This error comes from DBI in its default implementation
             # of begin_work(). There didn't seem to be a way to shut
-            # this off (setting PrintWarn to false does not do
-            # it). Hopefully the message text won't change.
+            # this off (setting PrintWarn to false does not do it, and
+            # setting Warn to false does not stop it for all drivers,
+            # either). Hopefully the message text won't change.
+            #
+            # The variant is for DBD::Mock, which has a slightly
+            # different version of the text.
             local $SIG{__WARN__}
-                = sub { warn @_ unless $_[0] =~ /Already in a transaction/ };
+                = sub { warn @_ unless $_[0] =~ /Already (?:with)?in a transaction/i
+                                    || $_[0] =~ /rollback ineffective/ };
 
             $dbh->begin_work();
             $dbh->begin_work();
