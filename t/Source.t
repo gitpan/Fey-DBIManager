@@ -1,19 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More;
-
-BEGIN
-{
-    unless ( eval { require DBD::Mock; 1 } )
-    {
-        plan skip_all => 'These tests require DBD::Mock.';
-    }
-    else
-    {
-        plan tests => 57;
-    }
-}
+use Test::More tests => 66;
 
 use Fey::DBIManager::Source;
 
@@ -21,7 +9,6 @@ use Fey::DBIManager::Source;
 my $DSN = 'dbi:Mock:foo';
 my $Username = 'user';
 my $Password = 'password';
-
 
 {
     my $source = Fey::DBIManager::Source->new( dsn => $DSN );
@@ -40,7 +27,7 @@ my $Password = 'password';
                'check default attributes' );
     ok( ! $source->post_connect(), 'no post_connect hook by default' );
     ok( $source->auto_refresh(), 'auto_refresh defaults to true' );
-    ok( ! $source->{threaded}, 'threads is false' );
+    ok( ! $source->_threaded(), 'threads is false' );
 
     my $sub = sub {};
     $source = Fey::DBIManager::Source->new( dsn          => $DSN,
@@ -201,7 +188,7 @@ EOF
 {
     my $source = Fey::DBIManager::Source->new( dsn => $DSN );
 
-    no warnings 'redefine';
+    no warnings 'redefine', 'once';
     local *DBD::Mock::db::begin_work = sub {};
     local *DBD::Mock::db::rollback   = sub {};
 
@@ -209,12 +196,33 @@ EOF
         'source allows nested transactions is true' );
 }
 
+{
+    my %attr = Fey::DBIManager::Source->_required_dbh_attributes();
+    my %bad_attr;
+
+    $bad_attr{$_} = $attr{$_} ? 0 : 1
+        for keys %attr;
+
+    my $dbh = DBI->connect( $DSN, '', '', \%bad_attr );
+    my $source = Fey::DBIManager::Source->new( dsn => $DSN, dbh => $dbh );
+
+    for my $k ( sort keys %attr )
+    {
+        my $actual_val = $source->dbh()->{$k};
+        ok( ( $attr{$k} ? $actual_val : ! $actual_val ),
+            "DBI attribute $k is set to required value for Source" );
+    }
+}
+
 SKIP:
 {
-    skip 'These tests require Test::Output', 1
+    skip 'These tests require Test::Output', 2
         unless eval "use Test::Output; 1";
 
-    stderr_is( sub { Fey::DBIManager::Source->new( dsn => $DSN )->_build_allows_nested_transactions() },
+    stderr_is( sub { ok( ! Fey::DBIManager::Source
+                               ->new( dsn => $DSN )
+                               ->allows_nested_transactions(),
+                         'DBD::Mock does not support nested transactions' ) },
                '',
                'no warnings checking for nested transaction support with DBD::Mock' );
 }
@@ -245,14 +253,13 @@ sub check_attributes
 
     my %expect = ( AutoCommit         => 1,
                    RaiseError         => 1,
-                   # DBD::Mock seems to lose this value when it's set after a handle is created (weird!)
-#                   PrintError         => 0,
+                   PrintError         => 0,
                    PrintWarn          => 1,
                    ShowErrorStatement => 1,
                  );
     for my $k ( sort keys %expect )
     {
-        is( $dbh->{$k}, $expect{$k},
-            "$k should be $expect{$k}" );
+        ok( ( $expect{$k} ? $dbh->{$k} : ! $dbh->{$k} ),
+            "$k should be " . ( $expect{$k} ? 'true' : 'false' ) );
     }
 }

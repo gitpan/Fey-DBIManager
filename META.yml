@@ -1,6 +1,6 @@
 ---
 name: Fey-DBIManager
-version: 0.08
+version: 0.09
 author:
   - 'Dave Rolsky, <autarch@urth.org>'
 abstract: Manage a set of DBI handles
@@ -14,13 +14,13 @@ requires:
   MooseX::SemiAffordanceAccessor: 0.03
   MooseX::StrictConstructor: 0.07
 build_requires:
-  DBD::Mock: 0
+  DBD::Mock: 1.38
   Fey::Test: 0.04
   Test::More: 0
 provides:
   Fey::DBIManager:
     file: lib/Fey/DBIManager.pm
-    version: 0.08
+    version: 0.09
   Fey::DBIManager::Source:
     file: lib/Fey/DBIManager/Source.pm
 generated_by: Module::Build version 0.3
