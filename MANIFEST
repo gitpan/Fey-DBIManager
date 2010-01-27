@@ -7,9 +7,11 @@ MANIFEST			This list of files
 META.yml
 README
 t/DBIManager.t
-t/kwalitee.t
-t/pod-coverage.t
-t/pod.t
 t/Source-SQLite.t
 t/Source.t
+xt/kwalitee.t
+xt/pod-coverage.t
+xt/pod-spell.t
+xt/pod.t
+xt/versions-match.t
 SIGNATURE    Added here by Module::Build

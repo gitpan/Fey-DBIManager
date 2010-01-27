@@ -2,111 +2,126 @@ package Fey::DBIManager::Source;
 
 use strict;
 use warnings;
+use namespace::autoclean;
+
+our $VERSION = '0.11';
 
 use DBI;
 use Fey::Exceptions qw( param_error );
 
 use Moose;
 use MooseX::SemiAffordanceAccessor;
-use MooseX::AttributeHelpers;
 use MooseX::StrictConstructor;
 
-has 'name' =>
-    ( is      => 'ro',
-      isa     => 'Str',
-      default => 'default',
-    );
+has 'name' => (
+    is      => 'ro',
+    isa     => 'Str',
+    default => 'default',
+);
 
-has 'dbh' =>
-    ( is         => 'rw',
-      isa        => 'DBI::db',
-      reader     => '_dbh',
-      writer     => '_set_dbh',
-      clearer    => '_unset_dbh',
-      predicate  => '_has_dbh',
-      lazy_build => 1,
-    );
+has 'dbh' => (
+    is         => 'rw',
+    isa        => 'DBI::db',
+    reader     => '_dbh',
+    writer     => '_set_dbh',
+    clearer    => '_unset_dbh',
+    predicate  => '_has_dbh',
+    lazy_build => 1,
+);
 
-after '_unset_dbh' =>
-    sub { $_[0]->_clear_allows_nested_transactions() };
+after '_unset_dbh' => sub { $_[0]->_clear_allows_nested_transactions() };
 
-has 'dsn' =>
-    ( is        => 'rw',
-      isa       => 'Str',
-      predicate => '_has_dsn',
-      writer    => '_set_dsn',
-      required  => 1,
-    );
+has 'dsn' => (
+    is        => 'rw',
+    isa       => 'Str',
+    predicate => '_has_dsn',
+    writer    => '_set_dsn',
+    required  => 1,
+);
 
-has 'username' =>
-    ( is      => 'ro',
-      isa     => 'Str',
-      default => '',
-    );
+has 'username' => (
+    is      => 'ro',
+    isa     => 'Str',
+    default => '',
+);
 
-has 'password' =>
-    ( is      => 'ro',
-      isa     => 'Str',
-      default => '',
-    );
+has 'password' => (
+    is      => 'ro',
+    isa     => 'Str',
+    default => '',
+);
 
-has 'attributes' =>
-    ( is      => 'rw',
-      isa     => 'HashRef',
-      writer  => '_set_attributes',
-      default => sub { {} },
-    );
+has 'attributes' => (
+    is      => 'rw',
+    isa     => 'HashRef',
+    writer  => '_set_attributes',
+    default => sub { {} },
+);
 
-has 'post_connect' =>
-    ( is  => 'ro',
-      isa => 'CodeRef',
-    );
+has 'post_connect' => (
+    is  => 'ro',
+    isa => 'CodeRef',
+);
 
-has 'auto_refresh' =>
-    ( is      => 'ro',
-      isa     => 'Bool',
-      default => 1,
-    );
+has 'auto_refresh' => (
+    is      => 'ro',
+    isa     => 'Bool',
+    default => 1,
+);
 
-has 'allows_nested_transactions' =>
-    ( is         => 'ro',
-      isa        => 'Bool',
-      lazy_build => 1,
-      clearer    => '_clear_allows_nested_transactions',
-    );
+has 'allows_nested_transactions' => (
+    is         => 'ro',
+    isa        => 'Bool',
+    lazy_build => 1,
+    clearer    => '_clear_allows_nested_transactions',
+);
 
-has '_threaded' =>
-    ( is         => 'ro',
-      isa        => 'Bool',
-      lazy_build => 1,
-      init_arg   => undef,
-    );
+has '_threaded' => (
+    is         => 'ro',
+    isa        => 'Bool',
+    lazy_build => 1,
+    init_arg   => undef,
+);
 
-has '_pid' =>
-    ( is       => 'rw',
-      isa      => 'Num',
-      init_arg => undef,
-    );
+has '_pid' => (
+    is       => 'rw',
+    isa      => 'Num',
+    init_arg => undef,
+);
 
-has '_tid' =>
-    ( is       => 'rw',
-      isa      => 'Num',
-      init_arg => undef,
-    );
+has '_tid' => (
+    is       => 'rw',
+    isa      => 'Num',
+    init_arg => undef,
+);
 
+has 'ping_interval' => (
+    is      => 'ro',
+    isa     => 'Maybe[Int]',
+    default => 60,
+);
 
-sub BUILD
-{
+has '_last_ping' => (
+    is       => 'rw',
+    isa      => 'Int',
+    default  => 0,
+    clearer  => '_clear_last_ping',
+    lazy     => 1,
+    init_arg => undef,
+);
+
+sub BUILD {
     my $self   = shift;
     my $params = shift;
 
-    $self->_set_attributes( { %{ $self->attributes() },
-                              $self->_required_dbh_attributes(),
-                            }
-                          );
+    $self->_set_attributes(
+        {
+            %{ $self->attributes() },
+            $self->_required_dbh_attributes(),
+        }
+    );
 
-    if ( $self->_has_dbh() )
-    {
+    if ( $self->_has_dbh() ) {
         $self->_set_pid_tid();
         $self->_apply_required_dbh_attributes();
     }
@@ -114,30 +129,27 @@ sub BUILD
     return $self;
 }
 
-sub _required_dbh_attributes
-{
-    return ( AutoCommit         => 1,
-             RaiseError         => 1,
-             PrintError         => 0,
-             PrintWarn          => 1,
-             ShowErrorStatement => 1,
-           );
+sub _required_dbh_attributes {
+    return (
+        AutoCommit         => 1,
+        RaiseError         => 1,
+        PrintError         => 0,
+        PrintWarn          => 1,
+        ShowErrorStatement => 1,
+    );
 }
 
-sub _apply_required_dbh_attributes
-{
+sub _apply_required_dbh_attributes {
     my $self = shift;
 
     my %attr = $self->_required_dbh_attributes();
 
-    for my $k ( sort keys %attr )
-    {
+    for my $k ( sort keys %attr ) {
         $self->dbh()->{$k} = $attr{$k};
     }
 }
 
-sub dbh
-{
+sub dbh {
     my $self = shift;
 
     $self->_ensure_fresh_dbh() if $self->auto_refresh();
@@ -145,20 +157,18 @@ sub dbh
     return $self->_dbh();
 }
 
-sub _build_dbh
-{
+sub _build_dbh {
     my $self = shift;
 
-    my $dbh =
-        DBI->connect
-            ( $self->dsn(), $self->username(),
-              $self->password(), $self->attributes() );
+    my $dbh = DBI->connect(
+        $self->dsn(),      $self->username(),
+        $self->password(), $self->attributes()
+    );
 
     $self->_set_pid_tid();
 
-    if ( my $pc = $self->post_connect() )
-    {
-        $pc->( $dbh );
+    if ( my $pc = $self->post_connect() ) {
+        $pc->($dbh);
     }
 
     $self->_set_dbh($dbh);
@@ -166,49 +176,46 @@ sub _build_dbh
     return $self->_dbh();
 }
 
-sub _build_allows_nested_transactions
-{
+sub _build_allows_nested_transactions {
     my $self = shift;
 
     my $dbh = $self->dbh();
 
-    my $allows_nested =
-        eval
-        {
-            # This error comes from DBI in its default implementation
-            # of begin_work(). There didn't seem to be a way to shut
-            # this off (setting PrintWarn to false does not do it, and
-            # setting Warn to false does not stop it for all drivers,
-            # either). Hopefully the message text won't change.
-            #
-            # The variant is for DBD::Mock, which has a slightly
-            # different version of the text.
-            local $SIG{__WARN__}
-                = sub { warn @_ unless $_[0] =~ /Already (?:with)?in a transaction/i
-                                    || $_[0] =~ /rollback ineffective/ };
+    my $allows_nested = eval {
 
-            $dbh->begin_work();
-            $dbh->begin_work();
-            $dbh->rollback();
-            $dbh->rollback();
-            1;
+        # This error comes from DBI in its default implementation
+        # of begin_work(). There didn't seem to be a way to shut
+        # this off (setting PrintWarn to false does not do it, and
+        # setting Warn to false does not stop it for all drivers,
+        # either). Hopefully the message text won't change.
+        #
+        # The variant is for DBD::Mock, which has a slightly
+        # different version of the text.
+        local $SIG{__WARN__} = sub {
+            warn @_
+                unless $_[0] =~ /Already (?:with)?in a transaction/i
+                    || $_[0] =~ /rollback ineffective/;
         };
 
-    if ($@)
-    {
+        $dbh->begin_work();
+        $dbh->begin_work();
+        $dbh->rollback();
+        $dbh->rollback();
+        1;
+    };
+
+    if ($@) {
         $dbh->rollback() unless $dbh->{AutoCommit};
     }
 
     return $allows_nested;
 }
 
-sub _build__threaded
-{
+sub _build__threaded {
     return threads->can('tid') ? 1 : 0;
 }
 
-sub _set_pid_tid
-{
+sub _set_pid_tid {
     my $self = shift;
 
     $self->_set_pid($$);
@@ -217,35 +224,46 @@ sub _set_pid_tid
 
 # The logic in this method is largely borrowed from
 # DBIx::Class::Storage::DBI.
-sub _ensure_fresh_dbh
-{
+sub _ensure_fresh_dbh {
     my $self = shift;
 
     my $dbh = $self->_dbh();
-    if ( $self->_pid() != $$ )
-    {
+    if ( $self->_pid() != $$ ) {
         $dbh->{InactiveDestroy} = 1;
         $dbh->disconnect();
         $self->_unset_dbh();
     }
 
-    if ( $self->_threaded()
-         &&
-         $self->_tid() != threads->tid()
-       )
-    {
+    if (   $self->_threaded()
+        && $self->_tid() != threads->tid() ) {
         $dbh->disconnect();
         $self->_unset_dbh();
     }
 
-    # Maybe consider only pinging once ever X seconds/minutes?
-    unless ( $dbh->{Active} && $dbh->ping() )
-    {
+    unless ( $dbh->{Active} && $self->_ping_dbh() ) {
         $dbh->disconnect();
         $self->_unset_dbh();
     }
 
     $self->_build_dbh() unless $self->_has_dbh();
+}
+
+sub _ping_dbh {
+    my $self = shift;
+
+    my $now  = time();
+
+    return 1 unless defined $self->ping_interval();
+    return 1 if ( $now - $self->_last_ping() ) < $self->ping_interval();
+
+    if ( $self->_dbh()->ping() ) {
+        $self->_set_last_ping($now);
+        return 1;
+    }
+    else {
+        $self->_clear_last_ping();
+        return 0;
+    }
 }
 
 no Moose;
@@ -326,6 +344,19 @@ A boolean value. The default is true, which means that whenever you
 call C<< $source->dbh() >>, the source ensures that the database
 handle is still active. See L<HANDLE FRESHNESS> for more details.
 
+=item * ping_interval
+
+An integer value representing the minimum number of seconds between
+successive pings of the database handle. See L<HANDLE FRESHNESS> for
+more details. The default value is 60 (seconds).  A value of 0 causes
+the source to ping the database handle each time you call
+C<< $source->dbh() >>.
+
+If you explicitly set this value to C<undef>, then the database will never be
+pinged.
+
+Note that if "auto_refresh" is false, this attribute is meaningless.
+
 =back
 
 =head2 $source->dbh()
@@ -349,7 +380,7 @@ These methods simply return the value of the specified attribute.
 
 =head2 $source->attributes()
 
-This method reutrns attributes hash reference for the source. This
+This method returns attributes hash reference for the source. This
 will be a combination of any attributes passed to the constructor plus
 the L<REQUIRED ATTRIBUTES>.
 
@@ -391,8 +422,13 @@ created. If it has, we set C<InactiveDestroy> to true in the handle
 and disconnect it. If the thread has changed, we just disconnect the
 handle.
 
-Finally, we check C<< $dbh->{Active] >> and call C<< $dbh->ping()
->>. If either of these is false, we disconnect the handle.
+Next, we check C<< $dbh->{Active] >> and, if this is false, we
+disconnect the handle.
+
+Finally, we check that the handle has responded to C<< $dbh->ping() >>
+within the past C<< $source->ping_interval() >> seconds.  If it hasn't,
+we call C<< $dbh->ping() >> and, if it returns false, we disconnect the
+handle.
 
 If the handle is not fresh, a new one is created.
 
@@ -409,7 +445,7 @@ automatically be notified of progress on your bug as I make changes.
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2006-2008 Dave Rolsky, All Rights Reserved.
+Copyright 2006-2010 Dave Rolsky, All Rights Reserved.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

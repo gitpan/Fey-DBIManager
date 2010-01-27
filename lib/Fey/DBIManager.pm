@@ -2,97 +2,88 @@ package Fey::DBIManager;
 
 use strict;
 use warnings;
+use namespace::autoclean;
 
-our $VERSION = '0.10';
+our $VERSION = '0.11';
 
 use Fey::Exceptions qw( object_state_error param_error );
 use Scalar::Util qw( blessed );
 
 use Fey::DBIManager::Source;
 
-use Moose 0.56;
+use Moose 0.90;
 use MooseX::SemiAffordanceAccessor;
-use MooseX::AttributeHelpers;
 use MooseX::StrictConstructor;
-use Moose::Util::TypeConstraints;
 
-has _sources =>
-    ( metaclass => 'Collection::Hash',
-      is        => 'ro',
-      isa       => 'HashRef[Fey::DBIManager::Source]',
-      default   => sub { {} },
-      init_arg  => undef,
-      provides  => { get    => 'get_source',
-                     set    => 'add_source',
-                     delete => 'remove_source',
-                     count  => '_source_count',
-                     exists => 'has_source',
-                     values => 'sources',
-                   },
-    );
+has _sources => (
+    traits   => ['Hash'],
+    is       => 'ro',
+    isa      => 'HashRef[Fey::DBIManager::Source]',
+    default  => sub { {} },
+    init_arg => undef,
+    handles  => {
+        get_source    => 'get',
+        add_source    => 'set',
+        remove_source => 'delete',
+        _source_count => 'count',
+        has_source    => 'exists',
+        sources       => 'values',
+    },
+);
 
-around 'add_source' =>
-    sub { my $orig   = shift;
-          my $self   = shift;
-
-          my $source;
-          if ( @_ > 1 )
-          {
-              $source = Fey::DBIManager::Source->new(@_);
-          }
-          else
-          {
-              $source = shift;
-          }
-
-          my $name;
-          if ( blessed $source && $source->can('name') )
-          {
-              $name = $source->name();
-
-              param_error qq{You already have a source named "$name".}
-                  if $self->has_source($name);
-          }
-
-          my $return = $self->$orig( $name => $source );
-
-          return $return;
-        };
-
-sub default_source
-{
+around 'add_source' => sub {
+    my $orig = shift;
     my $self = shift;
 
-    if ( $self->_source_count() == 0 )
-    {
-        object_state_error 'This manager has no default source because it has no sources at all.';
+    my $source;
+    if ( @_ > 1 ) {
+        $source = Fey::DBIManager::Source->new(@_);
     }
-    elsif ( $self->_source_count() == 1 )
-    {
+    else {
+        $source = shift;
+    }
+
+    my $name;
+    if ( blessed $source && $source->can('name') ) {
+        $name = $source->name();
+
+        param_error qq{You already have a source named "$name".}
+            if $self->has_source($name);
+    }
+
+    my $return = $self->$orig( $name => $source );
+
+    return $return;
+};
+
+sub default_source {
+    my $self = shift;
+
+    if ( $self->_source_count() == 0 ) {
+        object_state_error
+            'This manager has no default source because it has no sources at all.';
+    }
+    elsif ( $self->_source_count() == 1 ) {
+
         # Need to force scalar context for the return value
         return ( $self->sources() )[0];
     }
-    elsif ( my $source = $self->get_source('default') )
-    {
+    elsif ( my $source = $self->get_source('default') ) {
         return $source;
     }
-    else
-    {
-        object_state_error 'This manager has multiple sources, but none are named "default".';
+    else {
+        object_state_error
+            'This manager has multiple sources, but none are named "default".';
     }
 
     return;
 }
 
-sub source_for_sql
-{
+sub source_for_sql {
     my $self = shift;
 
     return $self->default_source();
 }
-
-no Moose;
-no Moose::Util::TypeConstraints;
 
 __PACKAGE__->meta()->make_immutable();
 

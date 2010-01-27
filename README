@@ -22,11 +22,9 @@ METHODS
     This class provides the following methods:
 
   Fey::DBIManager->new()
-
     Returns a new `Fey::DBIManager' object.
 
   $manager->add_source(...)
-
     This method adds a new Fey::DBIManager::Source object to the manager. It
     can either accept an instantiated Fey::DBIManager::Source object, or a
     set of parameters needed to create a new source.
@@ -35,31 +33,25 @@ METHODS
     exists in the manager, an error will be thrown.
 
   $manager->get_source($name)
-
     Given a source name, this returns the named source, if it exists in the
     manager.
 
   $manager->remove_source($name)
-
     Removes the named source, if it exists in the manager.
 
   $manager->has_source($name)
-
     Returns true if the manager has the named source.
 
   $manager->sources()
-
     Returns all of the source in the manager.
 
   $manager->default_source()
-
     This method returns the default source for the manager. If the manager
     has only one source, then this is the default. Otherwise it looks for a
     source named "default". If no such source exists, or if the manager has
     no sources at all, then an exception is thrown.
 
   $manager->source_for_sql($sql_object)
-
     This method accepts a single `Fey::SQL' object and returns an
     appropriate source.
 
