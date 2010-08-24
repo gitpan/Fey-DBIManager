@@ -1,10 +1,11 @@
 package Fey::DBIManager::Source;
+BEGIN {
+  $Fey::DBIManager::Source::VERSION = '0.12';
+}
 
 use strict;
 use warnings;
 use namespace::autoclean;
-
-our $VERSION = '0.11';
 
 use DBI;
 use Fey::Exceptions qw( param_error );
@@ -230,17 +231,17 @@ sub _ensure_fresh_dbh {
     my $dbh = $self->_dbh();
     if ( $self->_pid() != $$ ) {
         $dbh->{InactiveDestroy} = 1;
-        $dbh->disconnect();
         $self->_unset_dbh();
+        undef $dbh;
     }
 
     if (   $self->_threaded()
         && $self->_tid() != threads->tid() ) {
-        $dbh->disconnect();
         $self->_unset_dbh();
+        undef $dbh;
     }
 
-    unless ( $dbh->{Active} && $self->_ping_dbh() ) {
+    if ( $dbh && !( $dbh->{Active} && $self->_ping_dbh() ) ) {
         $dbh->disconnect();
         $self->_unset_dbh();
     }
@@ -266,17 +267,23 @@ sub _ping_dbh {
     }
 }
 
-no Moose;
-
 __PACKAGE__->meta()->make_immutable();
 
 1;
 
-__END__
+# ABSTRACT: Wraps a single DBI handle
+
+
+
+=pod
 
 =head1 NAME
 
 Fey::DBIManager::Source - Wraps a single DBI handle
+
+=head1 VERSION
+
+version 0.12
 
 =head1 SYNOPSIS
 
@@ -417,10 +424,9 @@ $source->dbh() >> incurs the cost of a "freshness" check. The upside
 of this is that it will just work in the face of forks, threading, and
 lost connections.
 
-First, we check to see if the pid has changed since the handle was
-created. If it has, we set C<InactiveDestroy> to true in the handle
-and disconnect it. If the thread has changed, we just disconnect the
-handle.
+First, we check to see if the pid has changed since the handle was created. If
+it has, we set C<InactiveDestroy> to true in the handle before making a new
+handle. If the thread has changed, we just make a new handle.
 
 Next, we check C<< $dbh->{Active] >> and, if this is false, we
 disconnect the handle.
@@ -432,10 +438,6 @@ handle.
 
 If the handle is not fresh, a new one is created.
 
-=head1 AUTHOR
-
-Dave Rolsky, <autarch@urth.org>
-
 =head1 BUGS
 
 Please report any bugs or feature requests to
@@ -443,11 +445,20 @@ C<bug-fey-dbimanager@rt.cpan.org>, or through the web interface at
 L<http://rt.cpan.org>.  I will be notified, and then you'll
 automatically be notified of progress on your bug as I make changes.
 
-=head1 COPYRIGHT & LICENSE
+=head1 AUTHOR
 
-Copyright 2006-2010 Dave Rolsky, All Rights Reserved.
+  Dave Rolsky <autarch@urth.org>
 
-This program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
+=head1 COPYRIGHT AND LICENSE
+
+This software is Copyright (c) 2010 by Dave Rolsky.
+
+This is free software, licensed under:
+
+  The Artistic License 2.0
 
 =cut
+
+
+__END__
+

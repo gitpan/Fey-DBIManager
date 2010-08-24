@@ -1,26 +1,20 @@
 ---
 abstract: 'Manage a set of DBI handles'
 author:
-  - 'Dave Rolsky, <autarch@urth.org>'
+  - 'Dave Rolsky <autarch@urth.org>'
 build_requires:
   DBD::Mock: 1.38
-  Fey::Test: 0.04
+  DBI: 0
   Test::More: 0.88
 configure_requires:
-  Module::Build: 0.36
-generated_by: 'Module::Build version 0.3603'
-license: perl
+  ExtUtils::MakeMaker: 6.31
+dynamic_config: 0
+generated_by: 'Dist::Zilla version 4.101900, CPAN::Meta::Converter version 2.101670'
+license: artistic_2
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
   version: 1.4
 name: Fey-DBIManager
-provides:
-  Fey::DBIManager:
-    file: lib/Fey/DBIManager.pm
-    version: 0.11
-  Fey::DBIManager::Source:
-    file: lib/Fey/DBIManager/Source.pm
-    version: 0.11
 requires:
   Fey: 0.12
   Moose: 0.90
@@ -29,7 +23,5 @@ requires:
   namespace::autoclean: 0
 resources:
   bugtracker: http://rt.cpan.org/NoAuth/Bugs.html?Dist=Fey-DBIManager
-  homepage: http://www.fey-project.org/
-  license: http://dev.perl.org/licenses/
   repository: http://hg.urth.org/hg/Fey-DBIManager
-version: 0.11
+version: 0.12
