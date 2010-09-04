@@ -4,7 +4,7 @@
       "Dave Rolsky <autarch@urth.org>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Dist::Zilla version 4.101900, CPAN::Meta::Converter version 2.101670",
+   "generated_by" : "Dist::Zilla version 4.102340, CPAN::Meta::Converter version 2.101670",
    "license" : [
       "artistic_2"
    ],
@@ -48,6 +48,6 @@
          "web" : "http://hg.urth.org/hg/Fey-DBIManager"
       }
    },
-   "version" : "0.12"
+   "version" : "0.13"
 }
 
