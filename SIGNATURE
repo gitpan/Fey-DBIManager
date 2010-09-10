@@ -1,5 +1,5 @@
 This file contains message digests of all files listed in MANIFEST,
-signed via the Module::Signature module, version 0.61.
+signed via the Module::Signature module, version 0.64.
 
 To verify the content in this distribution, first make sure you have
 Module::Signature installed, then type:
@@ -14,21 +14,21 @@ not run its Makefile.PL or Build.PL.
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA1
 
-SHA1 a35cee27d3127655d6cefb3d5c73e9aa125ec5a7 Changes
-SHA1 940821658f5ce07f9ec5832fef974f70cf84280e INSTALL
+SHA1 d5dd8d8785cc509c6507172fdd448aa812de69ec Changes
+SHA1 f3fffa81b52716835a289f8a6509f8e541adc4bf INSTALL
 SHA1 23c628b4a8a36738405ccdacaeb912d2e727b4c0 LICENSE
 SHA1 07d6b0fee6109937e0a1e0f05ba9ae21ddfeb362 MANIFEST
-SHA1 6d6ac88d27a738fff06304e0b16523e8f821a5ca META.json
-SHA1 57ea877d50d472bad17cc25782729e426f3fce16 META.yml
-SHA1 0027f6633315cc650b51c5ee22e6190ac32d52fc Makefile.PL
-SHA1 a1466149af70182ca917ddfd97509a2e9c803c40 README
-SHA1 165ec242743cbadae94f4bcc3040b62de6a7d0a3 dist.ini
-SHA1 f5d0014b3a92406a34a10a6714f241249546f656 lib/Fey/DBIManager.pm
-SHA1 e30ace2fb0c850a6636f2115b01f29bfce001483 lib/Fey/DBIManager/Source.pm
+SHA1 a356cffc1767cd10ee1d447558d72c2aeefb347c META.json
+SHA1 065d42b4f27f7d2949c7a2e66f9531a68dd1cf34 META.yml
+SHA1 ee36ce6073fb130c03609e22e8677bcbeac94524 Makefile.PL
+SHA1 9704e7fce71efb3000d9d1a4be84733070b3b56e README
+SHA1 81cf0eeedf8aba49d97682176addaf4a3f2f3cd3 dist.ini
+SHA1 d5782de8e69c3a52a5db6f3f2491f5deb3bc4bec lib/Fey/DBIManager.pm
+SHA1 d49c198ca57d521b94bf94a5205ae2fefbeeb8cd lib/Fey/DBIManager/Source.pm
 SHA1 a0ea75f03a5c2312cf1c1ef5da3627764bed959d t/DBIManager.t
 SHA1 ac1c1bb1b34de064ff0e3219a355a2664a3ffbb0 t/Source-SQLite.t
 SHA1 e5140ea91ae62ec9ace3b18ec53be5cf64f53698 t/Source.t
-SHA1 24b525e3c18f37f8022a01ec30de757cefb679ff t/release-eol.t
+SHA1 a032c41ef6887fab1b900669c2d304fab46680e2 t/release-eol.t
 SHA1 2e224c7902e9300470d60097fc78ab718e5c1249 t/release-fork.t
 SHA1 961a1e2c92d836c8cad2d34b784cbc75345dec63 t/release-kwalitee.t
 SHA1 455d1dd1867212a665ad5ea4126b572411de300c t/release-no-tabs.t
@@ -39,7 +39,7 @@ SHA1 5c32b6f4f86ce470ee439109c858a4ad7f81fc0e t/release-thread.t
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.4.10 (GNU/Linux)
 
-iEYEARECAAYFAkyCcAcACgkQIgMCsV8qvRKIAgCggvpDQ0k75awM79kXkzTNYQOM
-vKsAoJCf5Kh0235f85GvQdMqHlHfrUS7
-=NB4a
+iEYEARECAAYFAkyKr0MACgkQIgMCsV8qvRKw5ACfTXOOEayUtYhHgAoqctzeZA/3
+sOUAnRzGcq1qEHL36dNInDJoMPO11uJc
+=+FQH
 -----END PGP SIGNATURE-----

@@ -5,6 +5,7 @@ author:
 build_requires:
   DBD::Mock: 1.38
   DBI: 0
+  Fey::Test: 0.08
   Test::More: 0.88
 configure_requires:
   ExtUtils::MakeMaker: 6.31
@@ -24,4 +25,4 @@ requires:
 resources:
   bugtracker: http://rt.cpan.org/NoAuth/Bugs.html?Dist=Fey-DBIManager
   repository: http://hg.urth.org/hg/Fey-DBIManager
-version: 0.13
+version: 0.14

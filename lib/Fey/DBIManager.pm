@@ -1,6 +1,6 @@
 package Fey::DBIManager;
 BEGIN {
-  $Fey::DBIManager::VERSION = '0.13';
+  $Fey::DBIManager::VERSION = '0.14';
 }
 
 use strict;
@@ -102,7 +102,7 @@ Fey::DBIManager - Manage a set of DBI handles
 
 =head1 VERSION
 
-version 0.13
+version 0.14
 
 =head1 SYNOPSIS
 
@@ -183,7 +183,7 @@ automatically be notified of progress on your bug as I make changes.
 
 =head1 AUTHOR
 
-  Dave Rolsky <autarch@urth.org>
+Dave Rolsky <autarch@urth.org>
 
 =head1 COPYRIGHT AND LICENSE
 

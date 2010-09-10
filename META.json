@@ -32,6 +32,7 @@
          "requires" : {
             "DBD::Mock" : "1.38",
             "DBI" : 0,
+            "Fey::Test" : "0.08",
             "Test::More" : "0.88"
          }
       }
@@ -48,6 +49,6 @@
          "web" : "http://hg.urth.org/hg/Fey-DBIManager"
       }
    },
-   "version" : "0.13"
+   "version" : "0.14"
 }
 
