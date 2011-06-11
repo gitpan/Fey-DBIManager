@@ -4,7 +4,7 @@
       "Dave Rolsky <autarch@urth.org>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Dist::Zilla version 4.102340, CPAN::Meta::Converter version 2.101670",
+   "generated_by" : "Dist::Zilla version 4.200007, CPAN::Meta::Converter version 2.110440",
    "license" : [
       "artistic_2"
    ],
@@ -16,7 +16,7 @@
    "prereqs" : {
       "configure" : {
          "requires" : {
-            "ExtUtils::MakeMaker" : "6.31"
+            "ExtUtils::MakeMaker" : "6.30"
          }
       },
       "runtime" : {
@@ -44,11 +44,11 @@
          "web" : "http://rt.cpan.org/NoAuth/Bugs.html?Dist=Fey-DBIManager"
       },
       "repository" : {
-         "type" : "hg",
-         "url" : "http://hg.urth.org/hg/Fey-DBIManager",
-         "web" : "http://hg.urth.org/hg/Fey-DBIManager"
+         "type" : "git",
+         "url" : "git://git.urth.org/Fey-DBIManager.git",
+         "web" : "http://git.urth.org/Fey-DBIManager.git"
       }
    },
-   "version" : "0.14"
+   "version" : "0.15"
 }
 
