@@ -1,6 +1,6 @@
 package Fey::DBIManager::Source;
 BEGIN {
-  $Fey::DBIManager::Source::VERSION = '0.15';
+  $Fey::DBIManager::Source::VERSION = '0.16';
 }
 
 use strict;
@@ -297,7 +297,7 @@ Fey::DBIManager::Source - Wraps a single DBI handle
 
 =head1 VERSION
 
-version 0.15
+version 0.16
 
 =head1 SYNOPSIS
 

@@ -1,3 +1,8 @@
+0.16     2011-06-14
+
+- The test fix in 0.15 didn't quite do the trick.
+
+
 0.15     2011-06-11
 
 - Tests assumed that $$ can be modified, which doesn't work on every platform.
